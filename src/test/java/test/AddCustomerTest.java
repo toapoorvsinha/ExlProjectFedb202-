@@ -1,5 +1,6 @@
 package test;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.annotations.Test;
@@ -28,7 +29,7 @@ public class AddCustomerTest {
 	String Zip = exlRead.getCellData("AddContactInfo", "Zip", 2);
 
 	@Test
-	public void userShouldBeAbleToCreateCustomer()
+	public void userShouldBeAbleToCreateCustomer() throws InterruptedException
 	{
 		//calls the init method and store in BrowserFactory return type WebDriver variable which is
 		//now going to be the same as driver in this class
@@ -58,6 +59,11 @@ public class AddCustomerTest {
 		addCustomerPage.insertState(State);
 		addCustomerPage.insertZip(Zip);
 		addCustomerPage.clickSaveButton();
+		
+		dashboardPage.clickListCustomerMenuElement();
+		addCustomerPage.validateInsertedCustomerandDelete();
+		}
+		
+
 	}
 
-}
