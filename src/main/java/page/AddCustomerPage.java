@@ -2,6 +2,7 @@ package page;
 
 import java.util.Random;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -37,9 +38,11 @@ public class AddCustomerPage extends BasePage {
 		Assert.assertEquals(ADD_CONTACT_HEADER.getText(), addContactHeader, "Add contact page not found");
 	}
 	//same name can't be passed twice, so we'll need to randomize.
+	String insertedName;
 	public void insertFullName(String fullName) {
 		int genNum = generateRandomNo(999);
-		FULL_NAME_ELEMENT.sendKeys(fullName + genNum);
+		insertedName = fullName + genNum;
+		FULL_NAME_ELEMENT.sendKeys(insertedName);
 	}
 	
 	
@@ -88,9 +91,36 @@ public class AddCustomerPage extends BasePage {
 
 		SAVE_BUTTON_ELEMENT.click();
 		
-	}	
+	}
 	
 	
+	// element 1 //tbody/tr[1]/td[3]
+	// element 2 //tbody/tr[2]/td[3]
+	// element 3 //tbody/tr[3]/td[3]
+	// formula is like tbody/tr[i]/td[3]
+	//to test the path on the table with its corresponding delete button, we're using the following xpath:
+	//tbody/tr[1]/td[3]/following-sibling::td[4]/a[2]
+	String before_xpath = "//tbody/tr[";
+	String after_xpath = "]/td[3]";
+	String after_xpath_delete = "]/td[3]/following-sibling::td[4]/a[2]";
+
+	
+	public void validateInsertedCustomerandDelete() {
+		
+		for(int i = 1; i<=10; i++) {
+			String namesFromList = driver.findElement(By.xpath(before_xpath+i+after_xpath)).getText();
+			//System.out.println(namesFromList);
+			//Assert.assertEquals(namesFromList, insertedName, "inserted name is not avaialble");
+			if(namesFromList.equalsIgnoreCase(insertedName)) {
+				System.out.println("Inserted name exists");
+				driver.findElement(By.xpath(before_xpath+i+after_xpath_delete)).click();
+			}
+			break;
+		}
+	
+		
+	}
+		
 	
 	
 }
